@@ -1,0 +1,42 @@
+<?php
+   
+
+class Template_model extends CI_Model {
+
+    //put your code here
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function get_data_contoh($params){
+        $this->db->select('*');
+        $this->db->from('nama_tabel a');
+        $this->db->join('nama_tabel b', 'b.nama_field = a.nama_field');
+        $this->db->where('a.nama_field', $params);
+        $query = $this->db->get();
+        return $query->row_array();
+        
+        // row_array = menampilkan dalam bentuk satu array
+        // row  = menampilkan dalam bentuk std_class
+        // result = menampilkan dalam bentuk array dan std_class
+        // result_array = menampilkan dalam bentuk aray multidimensi
+    }
+
+    // Insert data menu
+    public function insert($table, $params)
+    {
+        return $this->db->insert($table, $params);
+    }
+
+    // update data menu
+    function update($table, $params, $where)
+    {
+        return $this->db->update($table, $params, $where);
+    }
+
+    // delete data menu
+    function delete($table, $params) {
+    return $this->db->delete($table, $params);
+    }
+
+}
