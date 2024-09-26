@@ -1,0 +1,5 @@
+- ADMIN -
+UN      :adminbase
+PSW     :1234
+
+- USER - 
