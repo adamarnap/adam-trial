@@ -24,19 +24,7 @@ function cek_akses_halaman()
     if ($uri == 'admin' || $uri == 'user') {
       $uri = 'dashboard';
     }
-    /* 
-    query --> SELECT *, SUBSTRING_INDEX(menu_url, '/', 1) AS menu_url_segment
-              FROM mst_menu
-              HAVING menu_url_segment = 'setting';
- */
 
-    // $ci->db->select('*');
-    // $ci->db->select("SUBSTRING_INDEX(menu_url, '/', 1) AS menu_url_segment");
-    // $ci->db->from('mst_menu');
-    // $ci->db->having('menu_url_segment', 'setting');
-    // $query_menu = $ci->db->get()->result_array();
-    // dd($query_menu);
-    $queryMenu = $ci->db->get_where('mst_menu', ['menu_url' => $uri])->row_array();
     $queryMenu = $ci->db->get_where('mst_menu', ['menu_url' => $uri])->row_array();
     $menu_id = $queryMenu['menu_id'];
     $user_access = $ci->db->get_where('mst_role_menu', ['role_id' => $role_id, 'menu_id' => $menu_id]);

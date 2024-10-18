@@ -1,0 +1,245 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <h1 class="h3 mb-4 text-gray-800">
+                <?= $sub_title . ' | ' . $main_title ?>
+            </h1>
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h2 class="h3 mb-0 text-gray-800">Daftar Data
+                            <?= $sub_title ?>
+                        </h2>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                            data-toggle="modal" data-target="#tambah_kategori">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah
+                            <?= $sub_title ?> Baru
+                        </a>
+                    </div>
+                    <!-- Notifikasi form validasi -->
+                    <?= $this->session->flashdata('message') ?>
+                    <!-- Notifikasi form validasi -->
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bouered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Kategori</th>
+                                    <th>Deskripsi</th>
+                                    <th>Tanggal Buat</th>
+                                    <th>Aski</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Kategori</th>
+                                    <th>Deskripsi</th>
+                                    <th>Tanggal Buat</th>
+                                    <th>Aski</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <?php $no = 1;
+                                foreach ($kategori as $kt) : ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <?= $no++ ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $kt['nama_kategori'] ? $kt['nama_kategori'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $kt['deskripsi_kategori'] ? $kt['deskripsi_kategori'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $kt['mdd'] ? $kt['mdd'] : '-' ?>
+                                    </td>
+
+
+                                    <td class="text-center d-flex align-items-center">
+                                        <a href=""
+                                            class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-1"
+                                            data-toggle="modal" data-target="#edit_kategori_<?= $kt['id_kategori'] ?>">
+                                            <i class="fas fa-edit fa-xs text-white-50"></i>
+                                        </a>
+                                        <a href="<?= base_url('trial/invalid/kategori/hapus_kategori/') . $kt['id_kategori'] ?>"
+                                            class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+                                            onclick="konfirmasiHapus(event)">
+                                            <i class="fas fa-trash fa-xs text-white-50"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+</div>
+
+
+<!-- Modals Add Kategori -->
+<div class="modal fade bd-example-modal-lg" id="tambah_kategori" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data <?= $sub_title ?> Baru</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Form Tambah Data Kategori -->
+                <form action="<?= base_url('trial/invalid/kategori/tambah_proses') ?>" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nama Kategori</b></label>
+                            <input type="text" class="form-control" name="nama_kategori"
+                                value="<?= set_value('nama_kategori') ?>" placeholder="Nama Kategori" id="" required>
+                            <?= form_error('nama_kategori', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Deskripsi Kategori</b></label>
+                            <textarea type="text" class="form-control" name="deskripsi_kategori" placeholder="Deskripsi Kategori" id="" required> </textarea>
+                            <?= form_error('deskripsi_kategori', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan Data <?= $sub_title ?></button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+        </div>
+    </div>
+</div>
+<!-- End Modals Edit Kategori -->
+
+<?php foreach($kategori as $kt): ?>
+<!-- Modals Add Kategori -->
+<div class="modal fade bd-example-modal-lg" id="edit_kategori_<?= $kt['id_kategori'] ?>" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data <?= $sub_title ?> Baru</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Form Edit Data Kategori -->
+                <form action="<?= base_url('trial/invalid/kategori/edit_proses') ?>" method="post">
+                    <input type="hidden" name="id_kategori" value="<?= $kt['id_kategori'] ?>">
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nama Kategori</b></label>
+                            <input type="text" class="form-control" name="nama_kategori"
+                                value="<?= $kt['nama_kategori'] ?>" placeholder="Nama Kategori" id="" required>
+                            <?= form_error('nama_kategori', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Deskripsi Kategori</b></label>
+                            <textarea type="text" class="form-control" name="deskripsi_kategori" placeholder="Deskripsi Kategori" id="" required> <?= $kt['deskripsi_kategori'] ?> </textarea>
+                            <?= form_error('deskripsi_kategori', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan Data <?= $sub_title ?></button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+<!-- End Modals Edit Kategori -->
+
+
+<script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    // Select 2
+    $(document).ready(function () {
+        $(".select2").select2({
+            theme: 'bootstrap4',
+        });
+    });
+
+    //  Menampilkan nama file setelah memilih file foto profile 
+    function showAddFileName(event) {
+        var input = event.target;
+        var fileName = input.files[0].name;
+        var label = input.nextElementSibling;
+        label.innerText = fileName;
+    }
+
+    function showEditFileName(event) {
+        var input = event.target;
+        var fileName = input.files[0].name;
+        var label = input.nextElementSibling;
+        label.innerText = fileName;
+    }
+
+    //  Konfirmasi Hapus
+    function konfirmasiHapus(e) {
+        e.preventDefault();
+        var urlToRedirect = e.currentTarget.getAttribute('href');
+        Swal.fire({
+            icon: 'question',
+            text: 'Apakah data ini ingin dihapus secara permanen ?',
+            title: 'Konfirmasi Hapus',
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonColor: '#ef4523',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            denyButtonText: `Don't save`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                window.location.href = urlToRedirect;
+            }
+        })
+    }
+
+    // Dataatable
+    $(document).ready(function() {
+    $('#dataTable').DataTable({
+        "pageLength": 100
+    });
+});
+</script>

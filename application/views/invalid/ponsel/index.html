@@ -1,0 +1,287 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <h1 class="h3 mb-4 text-gray-800">
+                <?= $sub_title . ' | ' . $main_title ?>
+            </h1>
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h2 class="h3 mb-0 text-gray-800">Daftar Data
+                            <?= $sub_title ?>
+                        </h2>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                            data-toggle="modal" data-target="#tambah_ponsel">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah
+                            <?= $sub_title ?> Baru
+                        </a>
+                    </div>
+                    <!-- Notifikasi form validasi -->
+                    <?= $this->session->flashdata('message') ?>
+                    <!-- Notifikasi form validasi -->
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bouered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Nomor</th>
+                                    <th>Nomor Ponsel</th>
+                                    <th>Tanggal Buat</th>
+                                    <th>Status</th>
+                                    <th>Aski</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Nomor</th>
+                                    <th>Nomor Ponsel</th>
+                                    <th>Tanggal Buat</th>
+                                    <th>Status</th>
+                                    <th>Aski</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <?php $no = 1;
+                                foreach ($ponsel as $p) : ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <?= $no++ ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $p['nama_phone'] ? $p['nama_phone'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $p['phone'] ? $p['phone'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $p['mdd'] ? $p['mdd'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <!-- badge -->
+                                        <span class="badge badge-<?= $p['st'] == '0' ? 'danger' : 'success' ?>">
+                                            <?= $p['st'] == '0' ? 'Tidak Aktif' : 'Aktif' ?>
+                                        </span>
+                                    </td>
+
+
+                                    <td class="text-center d-flex align-items-center">
+                                        <a href=""
+                                            class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-1"
+                                            data-toggle="modal" data-target="#edit_ponsel_<?= $p['id_phone'] ?>">
+                                            <i class="fas fa-edit fa-xs text-white-50"></i>
+                                        </a>
+                                        <a href="<?= base_url('trial/invalid/ponsel/hapus_ponsel/') . $p['id_phone'] ?>"
+                                            class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+                                            onclick="konfirmasiHapus(event)">
+                                            <i class="fas fa-trash fa-xs text-white-50"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+</div>
+
+
+<!-- Modals Add Ponsel -->
+<div class="modal fade bd-example-modal-lg" id="tambah_ponsel" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data
+                    <?= $sub_title ?> Baru
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Form Tambah Data Ponsel -->
+                <form action="<?= base_url('trial/invalid/ponsel/tambah_proses') ?>" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nama Ponsel</b></label>
+                            <input type="text" class="form-control" name="nama_phone"
+                                value="<?= set_value('nama_phone') ?>" placeholder="Nama Ponsel" id="" required>
+                            <?= form_error('nama_phone', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nomor Ponsel</b></label>
+                            <input type="number" class="form-control" name="phone"
+                                value="<?= set_value('phone') ?>" placeholder="Nomor Ponsel" id="" required>
+                            <?= form_error('phone', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Status</b></label>
+                            <select class="form-control" name="status" id="" required>
+                                <option value="">-- Pilih Status --</option>
+                                <option value="1">Aktif</option>
+                                <option value="0">Tidak Aktif</option>
+                            </select>
+                            <?= form_error('status', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan Data
+                            <?= $sub_title ?>
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+        </div>
+    </div>
+</div>
+<!-- End Modals Add Ponsel -->
+
+<!-- Modals Add Ponsel -->
+<?php foreach ($ponsel as $p) : ?>
+<div class="modal fade bd-example-modal-lg" id="edit_ponsel_<?= $p['id_phone']?>" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data
+                    <?= $sub_title ?> Baru
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Form Edit Data Ponsel -->
+                <form action="<?= base_url('trial/invalid/ponsel/edit_proses') ?>" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nama Ponsel</b></label>
+                            <input type="text" class="form-control" name="nama_phone"
+                                value="<?= $p['nama_phone'] ?>" placeholder="Nama Ponsel" id="" required>
+                            <?= form_error('nama_phone', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nomor Ponsel</b></label>
+                            <input type="number" class="form-control" name="phone"
+                                value="<?= $p['phone'] ?>" placeholder="Nomor Ponsel" id="" required>
+                            <?= form_error('phone', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Status</b></label>
+                            <select class="form-control" name="status" id="" required>
+                                <option value="">-- Pilih Status --</option>
+                                <option value="1" <?= $p['st'] == 1 ? 'selected' : '' ?>>Aktif</option>
+                                <option value="0"  <?= $p['st'] == 0 ? 'selected' : '' ?>>Tidak Aktif</option>
+                            </select>
+                            <?= form_error('status', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan Data
+                            <?= $sub_title ?>
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+<!-- End Modals Add Ponsel -->
+
+
+
+<script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    // Select 2
+    $(document).ready(function () {
+        $(".select2").select2({
+            theme: 'bootstrap4',
+        });
+    });
+
+    //  Menampilkan nama file setelah memilih file foto profile 
+    function showAddFileName(event) {
+        var input = event.target;
+        var fileName = input.files[0].name;
+        var label = input.nextElementSibling;
+        label.innerText = fileName;
+    }
+
+    function showEditFileName(event) {
+        var input = event.target;
+        var fileName = input.files[0].name;
+        var label = input.nextElementSibling;
+        label.innerText = fileName;
+    }
+
+    //  Konfirmasi Hapus
+    function konfirmasiHapus(e) {
+        e.preventDefault();
+        var urlToRedirect = e.currentTarget.getAttribute('href');
+        Swal.fire({
+            icon: 'question',
+            text: 'Apakah data ini ingin dihapus secara permanen ?',
+            title: 'Konfirmasi Hapus',
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonColor: '#ef4523',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            denyButtonText: `Don't save`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                window.location.href = urlToRedirect;
+            }
+        })
+    }
+
+    // Dataatable
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "pageLength": 100
+        });
+    });
+</script>

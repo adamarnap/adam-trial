@@ -31,6 +31,7 @@ class auth extends CI_Controller
             // ketika validasi gagal
             $data['title'] =  $this->portal . ' | Login';
             $data['portal'] =  $this->portal;
+            $data['captcha'] = $this->create_captcha();
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/login');
             $this->load->view('templates/auth_footer');
@@ -41,12 +42,30 @@ class auth extends CI_Controller
         }
     }
 
+    /* Captcha */
+    function create_captcha()
+    {
+    $data = array(
+        'img_path' => 'assets/captcha/',
+        'img_url' => base_url('captcha'),
+        'img_width' => '150',
+        'img_height' => '30',
+        'expiration' => 7200
+    );
+
+    $captcha = create_captcha($data);
+    $captcha = $captcha['filename'];
+
+    return $captcha;
+    }
+
     /* Method Login */
     private function _login()
     {
         // Get data dari form input
         $user_nama  = $this->input->post('user_nama');
         $user_pass  = $this->input->post('user_pass');
+        $captcha = $this->input->post('captcha');
 
         // cek username
         // Get data dari database sesuai data yang diinputkan
@@ -69,11 +88,15 @@ class auth extends CI_Controller
                         'user_img_name' => $user['user_img_name'],
                         'role_id' => $user['role_id'],
                         'role_default' => $user['role_default'],
-                        'role_tampil' => $user['role_tampil']
+                        'role_tampil' => $user['role_tampil'],
+                        'captcha' => $captcha
                     ];
 
                     // Simpan $data ke session
                     $this->session->set_userdata($data);
+
+                    // Delete Captcha
+                    $this->delete_captcha();
 
                     // Redirect berdasarkan role user
                     if ($user['role_id'] == 01) {
@@ -97,6 +120,17 @@ class auth extends CI_Controller
             // Jika username tidak terdaftar
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Maaf username tidak terdaftar.</div>');
             redirect(('auth'));
+        }
+    }
+
+    // Delete File Captcha
+    function delete_captcha()
+    {
+        $files = glob('assets/captcha/*'); // get all file names
+        foreach ($files as $file) { // iterate files
+            if (is_file($file)) {
+                unlink($file); // delete file
+            }
         }
     }
 

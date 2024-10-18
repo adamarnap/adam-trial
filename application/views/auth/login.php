@@ -27,6 +27,17 @@
                                         <input type="password" class="form-control form-control-user" id="user_pass" name="user_pass" placeholder="Masuukan Password">
                                         <?= form_error('user_pass', '<small class="text-danger pl-3">', '</small>') ?>
                                     </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-4 mt-2">
+                                                <img src="<?= base_url('assets/captcha/' . $captcha) ?>" alt="">
+                                            </div>
+                                            <div class="col-8">
+                                                <input type="text" class="form-control form-control-user" id="captcha" name="captcha" placeholder="Masuukan Captcha" required>
+                                                <?= form_error('captcha', '<small class="text-danger pl-3">', '</small>') ?>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Login
                                     </button>

@@ -1,0 +1,374 @@
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <h1 class="h3 mb-4 text-gray-800">
+                <?= $sub_title . ' | ' . $main_title ?>
+            </h1>
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h2 class="h3 mb-0 text-gray-800">Daftar Data
+                            <?= $sub_title ?>
+                        </h2>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                            data-toggle="modal" data-target="#tambah_mail">
+                            <i class="fas fa-plus fa-sm text-white-50"></i> Tambah
+                            <?= $sub_title ?> Baru
+                        </a>
+                    </div>
+                    <!-- Notifikasi form validasi -->
+                    <?= $this->session->flashdata('message') ?>
+                    <!-- Notifikasi form validasi -->
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bouered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Email</th>
+                                    <th>Deskripsi</th>
+                                    <th>Tanggal Buat</th>
+                                    <th>Status</th>
+                                    <th>Aski</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Email</th>
+                                    <th>Deskripsi</th>
+                                    <th>Tanggal Buat</th>
+                                    <th>Status</th>
+                                    <th>Aski</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <?php $no = 1;
+                                foreach ($mail as $ml) : ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <?= $no++ ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $ml['nama_mail'] ? $ml['nama_mail'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $ml['deskripsi_mail'] ? $ml['deskripsi_mail'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <?= $ml['mdd'] ? $ml['mdd'] : '-' ?>
+                                    </td>
+                                    <td class="text-left">
+                                        <!-- badge -->
+                                        <span class="badge badge-<?= $ml['status'] == '0' ? 'danger' : 'success' ?>">
+                                            <?= $ml['status'] == '0' ? 'Tidak Aktif' : 'Aktif' ?>
+                                        </span>
+                                    </td>
+
+
+                                    <td class="text-center d-flex align-items-center">
+                                        <a href=""
+                                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1"
+                                            data-toggle="modal" data-target="#view_mail_<?= $ml['id_mail'] ?>">
+                                            <i class="fas fa-eye fa-xs text-white-50"></i>
+                                        </a>
+                                        <a href=""
+                                            class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm mr-1"
+                                            data-toggle="modal" data-target="#edit_mail_<?= $ml['id_mail'] ?>">
+                                            <i class="fas fa-edit fa-xs text-white-50"></i>
+                                        </a>
+                                        <a href="<?= base_url('trial/invalid/mail/hapus_mail/') . $ml['id_mail'] ?>"
+                                            class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+                                            onclick="konfirmasiHapus(event)">
+                                            <i class="fas fa-trash fa-xs text-white-50"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+</div>
+
+
+<!-- Modals Add Mail -->
+<div class="modal fade bd-example-modal-lg" id="tambah_mail" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data
+                    <?= $sub_title ?> Baru
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Form Tambah Data Mail -->
+                <form action="<?= base_url('trial/invalid/mail/tambah_proses') ?>" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nama Mail</b></label>
+                            <input type="email" class="form-control" name="nama_mail"
+                                value="<?= set_value('nama_mail') ?>" placeholder="Nama Mail" id="" required>
+                            <?= form_error('nama_mail', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Deskripsi Mail</b></label>
+                            <textarea type="text" class="form-control" name="deskripsi_mail"
+                                placeholder="Deskripsi Mail" id="" required></textarea>
+                            <?= form_error('deskripsi_mail', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Status Mail</b></label>
+                            <select class="form-control" name="status" id="" required>
+                                <option value="">-- Pilih Status --</option>
+                                <option value="1">Aktif</option>
+                                <option value="0">Tidak Aktif</option>
+                            </select>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Password Mail</b></label>
+                            <input type="password" class="form-control" name="password" placeholder="Password" id=""
+                                required>
+                            <?= form_error('password', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan Data
+                            <?= $sub_title ?>
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+        </div>
+    </div>
+</div>
+<!-- End Modals Add Mail -->
+
+<?php foreach($mail as $ml): ?>
+<!-- Modals Edit Mail -->
+<div class="modal fade bd-example-modal-lg" id="edit_mail_<?= $ml['id_mail'] ?>" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data
+                    <?= $sub_title ?> Baru
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Form Edit Data Mail -->
+                <form action="<?= base_url('trial/invalid/mail/edit_proses') ?>" method="post">
+                    <input type="hidden" name="id_mail" value="<?= $ml['id_mail'] ?>">
+                    <input type="hidden" name="old_nama_mail" value="<?= $ml['nama_mail'] ?>">
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Nama Mail</b></label>
+                            <input type="text" class="form-control" name="nama_mail" value="<?= $ml['nama_mail'] ?>"
+                                placeholder="Nama Mail" id="" required>
+                            <?= form_error('nama_mail', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Deskripsi Mail</b></label>
+                            <textarea type="text" class="form-control" name="deskripsi_mail"
+                                placeholder="Deskripsi Mail" id="" required> <?= $ml['deskripsi_mail'] ?> </textarea>
+                            <?= form_error('deskripsi_mail', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Status Mail</b></label>
+                            <select class="form-control" name="status" id="" required>
+                                <option value="">-- Pilih Status --</option>
+                                <option value="1" <?= $ml['status'] == '1' ? 'selected' : '' ?>>Aktif</option>
+                                <option value="0" <?= $ml['status'] == '0' ? 'selected' : '' ?>>Tidak Aktif</option>
+                            </select>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label class="col-form-label"><b>Password Mail</b></label>
+                            <?php foreach( $ml['psw'] as $key => $pw): ?>
+                                <?php $count = count($ml['psw']) - 1?>
+                                    <input type="text" class="form-control mb-2" name="<?= $key == $count ? 'password' : '' ?>" value="<?= $pw['password'] ?>" <?= $key != $count ? 'disabled' : '' ?> <?= $key == $count ? 'required' : '' ?>>
+                            <?php endforeach; ?>
+                            <?= form_error('password', '<small class="text-danger pl-3">', '</small>') ?>
+                            <small class="text-danger pl-2">Wajib diisi</small>
+                        </div>
+                    </div>
+                    <input type="hidden" name="old_password" value="<?= $ml['psw'][$count]['password'] ?>">
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan Data
+                            <?= $sub_title ?>
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal Footer -->
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+<!-- End Modals Edit Mail -->
+
+<!-- Modals View Mail-->
+<?php foreach ($mail as $ml) : ?>
+<div class="modal fade bd-example-modal-lg" id="view_mail_<?= $ml['id_mail'] ?>" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Data Mail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label"><b>Email</b></label>
+                        <input type="text" class="form-control" value="<?= $ml['nama_mail'] ?>" id="" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label"><b>Deskripsi</b></label>
+                        <textarea type="text" class="form-control" id="" disabled> <?= $ml['deskripsi_mail'] ?> </textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label"><b>Status</b></label>
+                        <input type="text" class="form-control" value="<?= $ml['status'] == '0' ? 'Tidak Aktif' : 'Aktif' ?>"
+                            id="" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label"><b>Password</b></label>
+                        <?php foreach( $ml['psw'] as $key => $pw): ?>
+                            <div class="row">
+                                <div class="col-8 mb-2">
+                                    <input type="text" class="form-control <?= $pw['old'] == 'T' ? 'text-danger' : 'text-secondary ' ?>" value="<?= $pw['password'] ?>" id="" disabled>
+                                </div>
+                                <div class="col-4">
+                                    <input type="text" class="form-control <?= $pw['old'] == 'T' ? 'text-danger' : 'text-secondary ' ?>" value="<?= $pw['mdd_token'] ?>" id="" disabled>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <div class="modal-footer mt-3">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+            <!-- Modal Footer -->
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+
+
+<script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    // Select 2
+    $(document).ready(function () {
+        $(".select2").select2({
+            theme: 'bootstrap4',
+        });
+    });
+
+    //  Menampilkan nama file setelah memilih file foto profile 
+    function showAddFileName(event) {
+        var input = event.target;
+        var fileName = input.files[0].name;
+        var label = input.nextElementSibling;
+        label.innerText = fileName;
+    }
+
+    function showEditFileName(event) {
+        var input = event.target;
+        var fileName = input.files[0].name;
+        var label = input.nextElementSibling;
+        label.innerText = fileName;
+    }
+
+    //  Konfirmasi Hapus
+    function konfirmasiHapus(e) {
+        e.preventDefault();
+        var urlToRedirect = e.currentTarget.getAttribute('href');
+        Swal.fire({
+            icon: 'question',
+            text: 'Apakah data ini ingin dihapus secara permanen ?',
+            title: 'Konfirmasi Hapus',
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonColor: '#ef4523',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal',
+            denyButtonText: `Don't save`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                window.location.href = urlToRedirect;
+            }
+        })
+    }
+
+    // Dataatable
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "pageLength": 100
+        });
+    });
+</script>
